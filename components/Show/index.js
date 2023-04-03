@@ -23,17 +23,20 @@ export default function Show({ initialSeasons = [] }) {
 
   function handleToggleHasSeen(seasonNumber, episodeNumber) {
     setSeasons((prevSeasons) => {
-      const season = prevSeasons.find(({ number }) => number === seasonNumber);
-
-      const episode = season.episodes.find(
-        ({ number }) => number === episodeNumber
-      );
-
-      episode.hasSeen = !episode.hasSeen;
-
-      console.log(prevSeasons);
-
-      return prevSeasons;
+      return prevSeasons.map((season) => {
+        if (season.number === seasonNumber) {
+          return {
+            ...season,
+            episodes: season.episodes.map((episode) => {
+              if (episode.number === episodeNumber) {
+                return { ...episode, hasSeen: !episode.hasSeen };
+              }
+              return episode;
+            }),
+          };
+        }
+        return season;
+      });
     });
   }
 
